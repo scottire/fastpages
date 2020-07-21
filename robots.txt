@@ -1,1 +1,1 @@
-Sitemap: https://scottire.github.io/fastpages/sitemap.xml
+Sitemap: https://scottcondron.com/sitemap.xml
