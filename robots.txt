@@ -1,1 +1,1 @@
-Sitemap: https://scottcondron.com/sitemap.xml
+Sitemap: https:scottcondron.com/sitemap.xml

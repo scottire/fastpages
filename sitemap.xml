@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>https://scottcondron.com/deep%20learning/ai/2020/01/17/begin-creating-dl-models.html</loc>
+<loc>https:scottcondron.com/deep%20learning/ai/2020/01/17/begin-creating-dl-models.html</loc>
 <lastmod>2020-01-17T00:00:00-06:00</lastmod>
 </url>
 <url>
-<loc>https://scottcondron.com/jupyter/blogging/visualisation/2020/01/20/this-blog-post-was-written-in-a-jupyter-notebooks.html</loc>
+<loc>https:scottcondron.com/jupyter/blogging/visualisation/2020/01/20/this-blog-post-was-written-in-a-jupyter-notebooks.html</loc>
 <lastmod>2020-01-20T00:00:00-06:00</lastmod>
 </url>
 <url>
-<loc>https://scottcondron.com/jupyter/optimisation/visualisation/2020/07/20/interactive-genetic-algorithm-dashboard-from-scratch-in-python.html</loc>
+<loc>https:scottcondron.com/jupyter/optimisation/visualisation/2020/07/20/interactive-genetic-algorithm-dashboard-from-scratch-in-python.html</loc>
 <lastmod>2020-07-20T00:00:00-05:00</lastmod>
 </url>
 <url>
-<loc>https://scottcondron.com/about/</loc>
+<loc>https:scottcondron.com/about/</loc>
 </url>
 <url>
-<loc>https://scottcondron.com/</loc>
+<loc>https:scottcondron.com/</loc>
 </url>
 <url>
-<loc>https://scottcondron.com/search/</loc>
+<loc>https:scottcondron.com/search/</loc>
 </url>
 <url>
-<loc>https://scottcondron.com/categories/</loc>
+<loc>https:scottcondron.com/categories/</loc>
 </url>
 </urlset>
