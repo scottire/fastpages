@@ -34,6 +34,13 @@ layout: notebook
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>If you want to interact with the final result first, you can play with it on to PyViz examples here: <a href="https://genetic-algorithm.pyviz.demo.anaconda.com/GA">https://genetic-algorithm.pyviz.demo.anaconda.com/GA</a></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>How can you maximise the number of components in a laptop, while having size, weight and price constraints? For questions like these, we often want to reach for optimisation algorithms, and one particularly fun one is Genetic Algorithm.</p>
 
 </div>
@@ -126,10 +133,10 @@ layout: notebook
 
 
 
-<div id="a4363af9-b5e0-440d-a32b-2ea716bd30c3"></div>
+<div id="1a86a718-715a-4148-a740-efbc1ace7059"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#a4363af9-b5e0-440d-a32b-2ea716bd30c3');
+var element = $('#1a86a718-715a-4148-a740-efbc1ace7059');
 
 (function(root) {
   function now() {
@@ -1305,10 +1312,10 @@ var element = $('#a4363af9-b5e0-440d-a32b-2ea716bd30c3');
 
 
 
-<div id="e035e0c5-6c09-4bce-915b-9b4eb39832b3"></div>
+<div id="d3cc9a1e-8896-4ccf-ab61-852c69555394"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#e035e0c5-6c09-4bce-915b-9b4eb39832b3');
+var element = $('#d3cc9a1e-8896-4ccf-ab61-852c69555394');
 
 if ((window.PyViz === undefined) || (window.PyViz instanceof HTMLElement)) {
   window.PyViz = {comms: {}, comm_status:{}, kernels:{}, receivers: {}, plot_index: []}
@@ -1793,7 +1800,6 @@ To recap: a bunch from the current population are selected at random to compete 
     <span class="n">next_population</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">pop_size</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
     <span class="n">tournament_size</span><span class="o">=</span><span class="mi">2</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">pop_size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)):</span>
-<span class="c1">#         breakpoint()</span>
         <span class="n">parent_a</span> <span class="o">=</span> <span class="n">tournament_select_with_replacement</span><span class="p">(</span><span class="n">current_population</span><span class="p">,</span> <span class="n">tournament_size</span><span class="p">,</span> <span class="n">problem</span><span class="p">)</span>
         <span class="n">parent_b</span> <span class="o">=</span> <span class="n">tournament_select_with_replacement</span><span class="p">(</span><span class="n">current_population</span><span class="p">,</span> <span class="n">tournament_size</span><span class="p">,</span> <span class="n">problem</span><span class="p">)</span>
         <span class="n">child_a</span><span class="p">,</span> <span class="n">child_b</span> <span class="o">=</span> <span class="n">crossover</span><span class="p">(</span><span class="n">parent_a</span><span class="p">,</span> <span class="n">parent_b</span><span class="p">)</span>
@@ -1935,10 +1941,10 @@ To recap: a bunch from the current population are selected at random to compete 
 
 
 
-<div id="cecd57ee-f65e-4285-8ea2-ac84a40e279d"></div>
+<div id="5857b100-725a-4622-a06e-85712d7c4e29"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#cecd57ee-f65e-4285-8ea2-ac84a40e279d');
+var element = $('#5857b100-725a-4622-a06e-85712d7c4e29');
 
 (function(root) {
   function now() {
@@ -3114,10 +3120,10 @@ var element = $('#cecd57ee-f65e-4285-8ea2-ac84a40e279d');
 
 
 
-<div id="564db7b6-cfe5-4a0f-aa24-001ab56871c3"></div>
+<div id="8c960028-4a84-47a9-947a-490630661e9d"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#564db7b6-cfe5-4a0f-aa24-001ab56871c3');
+var element = $('#8c960028-4a84-47a9-947a-490630661e9d');
 
 if ((window.PyViz === undefined) || (window.PyViz instanceof HTMLElement)) {
   window.PyViz = {comms: {}, comm_status:{}, kernels:{}, receivers: {}, plot_index: []}
@@ -3352,7 +3358,9 @@ if (window.Jupyter !== undefined) {
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>You can view and run all the code yourself from <a href="https://github.com/scottire/examples">here</a>. Thanks for reading. <a href="https://www.twitter.com/_scottcondron">Follow me on Twitter here</a> to see updates on when this is live and merged into PyViz examples so you can play with it when it's deployed.</p>
+<p>Here it is deploy on PyViz examples: <a href="https://genetic-algorithm.pyviz.demo.anaconda.com/GA">https://genetic-algorithm.pyviz.demo.anaconda.com/GA</a>.</p>
+<p>You can also view and run all the code yourself from <a href="https://github.com/scottire/examples">here</a>. Thanks for reading.</p>
+<p><a href="https://www.twitter.com/_scottcondron">Follow me on Twitter here</a> for more stuff like this.</p>
 
 </div>
 </div>
