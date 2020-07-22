@@ -36,7 +36,7 @@ Machine Learning research sometimes feels like an activity reserved for the inte
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="/fastpages/images/copied_from_nb/my_icons/oliver.jpeg" alt="" title="Please, can I have an open-source implementation?"></p>
+<p><img src="/fastpages/images/copied_from_nb/fastpages/my_icons/oliver.jpeg" alt="" title="Please, can I have an open-source implementation?"></p>
 
 </div>
 </div>

@@ -49,10 +49,10 @@ use_math: true
 show_description: true
 
 # Set this to true to display image previews on home page, if they exist
-show_image: false
+show_image: true
 
 # Set this to true to display tags on each post
-show_tags: false
+show_tags: true
 
 # Add your Google Analytics ID here if you have one and want to use it
 google_analytics: UA-156469707-1
