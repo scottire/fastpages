@@ -4,10 +4,12 @@ title: About Me
 permalink: /about/
 ---
 
-This is where you put the contents of your *About* page. Like all your pages, it's in [Markdown](https://guides.github.com/features/mastering-markdown/) format.
+I'm from Dublin, Ireland 🇮🇪 and living in Edinburgh, Scotland 🏴󠁧󠁢󠁳󠁣󠁴󠁿 
 
-This website is powered by **[fastpages](https://github.com/fastai/fastpages)** [^1].
+I'm currently interested in Deep Learning with Audio, Python software development, data visualisation and bits and bobs from lots of other areas.
 
+I was working as a web/mobile software developer for a few years and then went back to university to do an MSc in AI in Heriot Watt University, Edinburgh.
 
+I'm now working as a Research Engineer in [Speech Graphics](https://www.speech-graphics.com)
 
-[^1]:a blogging platform that natively supports Jupyter notebooks in addition to other formats.
+You can follow me on Twitter [here.](https://www.twitter.com/_scottcondron)
