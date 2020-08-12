@@ -199,7 +199,7 @@ window.onload = wrap_img;
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>I'm hoping it's to read about <strong>Swarm Intelligence!</strong> I'm also hoping you're interested to read about the <strong><em>interactive dashboard</em></strong> side of things too so we can play with it at the end.</p>
-<p>If that sounds like too much and you just want to play with it now, you can use it on PyViz examples here: <a href="https://particle-swarm-optimisation.pyviz.demo.anaconda.com/pso">https://particle-swarm-optimisation.pyviz.demo.anaconda.com/pso</a></p>
+<p>If that sounds like too much and you just want to play with it now, <strong>you can use it on PyViz examples here: <a href="https://particle-swarms.pyviz.demo.anaconda.com/pso">https://particle-swarms.pyviz.demo.anaconda.com/pso</a></strong></p>
 <p>We're going to build the dashboard using some of <a href="https://www.anaconda.com/">Anacondas</a>'s <a href="https://holoviz.org/">HoloViz</a> tools (Holoviews, Panel and Bokeh) to <strong>get the result from the tweet below.</strong></p>
 
 </div>
@@ -213,7 +213,7 @@ window.onload = wrap_img;
 <center>
     <div class="jekyll-twitter-plugin">
 <blockquote class="twitter-tweet">
-<p lang="en" dir="ltr">After building an Interactive Genetic Algorithm Dashboard last week (<a href="https://t.co/u7fssGvaEP">https://t.co/u7fssGvaEP</a>), I thought it would be fun to see Particle Swarm Optimisation (PSO) in action. Click to set a target and watch them fly towards it.<br>All built using <a href="https://twitter.com/HoloViews?ref_src=twsrc%5Etfw">@HoloViews</a>, <a href="https://twitter.com/Panel_org?ref_src=twsrc%5Etfw">@Panel_org</a> and <a href="https://twitter.com/bokeh?ref_src=twsrc%5Etfw">@bokeh</a>. <a href="https://t.co/j5bVHieFUS">pic.twitter.com/j5bVHieFUS</a></p>— Scott Condron (@_ScottCondron) <a href="https://twitter.com/_ScottCondron/status/1288199199029420034?ref_src=twsrc%5Etfw">July 28, 2020</a>
+<p lang="en" dir="ltr">New blog post! 🥳🕺<br><br>Interactive Particle Swarm Optimisation Dashboard from Scratch in Python. <br><br>Click to set a target and see the particles flock towards it!<br><br>Uses <a href="https://twitter.com/HoloViews?ref_src=twsrc%5Etfw">@HoloViews</a>, <a href="https://twitter.com/Panel_org?ref_src=twsrc%5Etfw">@Panel_org</a> and <a href="https://twitter.com/bokeh?ref_src=twsrc%5Etfw">@bokeh</a> for interaction. <a href="https://t.co/cCZNwonU3P">https://t.co/cCZNwonU3P</a> <a href="https://t.co/6xxcAsg1GA">pic.twitter.com/6xxcAsg1GA</a></p>— Scott Condron (@_ScottCondron) <a href="https://twitter.com/_ScottCondron/status/1293605204013846530?ref_src=twsrc%5Etfw">August 12, 2020</a>
 </blockquote>
 <script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 </div>
@@ -413,10 +413,10 @@ window.onload = wrap_img;
 
 
 
-<div id="5da93e16-286d-4025-af96-dbaf1f95b16d"></div>
+<div id="2c21a80e-6bbf-4555-9810-57498b6caa0f"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#5da93e16-286d-4025-af96-dbaf1f95b16d');
+var element = $('#2c21a80e-6bbf-4555-9810-57498b6caa0f');
 
 (function(root) {
   function now() {
@@ -1437,10 +1437,10 @@ var element = $('#5da93e16-286d-4025-af96-dbaf1f95b16d');
 
 
 
-<div id="70b85c86-aae0-45b4-99d0-b8619e81300f"></div>
+<div id="45ce33ac-8ee8-4ca5-bbd2-25783ee1352a"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#70b85c86-aae0-45b4-99d0-b8619e81300f');
+var element = $('#45ce33ac-8ee8-4ca5-bbd2-25783ee1352a');
 
 if ((window.PyViz === undefined) || (window.PyViz instanceof HTMLElement)) {
   window.PyViz = {comms: {}, comm_status:{}, kernels:{}, receivers: {}, plot_index: []}
@@ -1853,7 +1853,7 @@ if (root.Bokeh !== undefined) {
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="https://www.scottcondron.com/images/copied_from_nb/my_icons/static_pso.png" alt="static_pso.png" title="Particles with velocity arrow"></p>
+<p><img src="https://www.scottcondron.com/images/copied_from_nb/my_icons/static_pso.png" alt="static_pso.png" title="Particles with an arrow showing their velocity."></p>
 
 </div>
 </div>
@@ -1864,7 +1864,7 @@ if (root.Bokeh !== undefined) {
 <p></p>
 <div class="flash">
     <svg class="octicon octicon-info" viewbox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
-    <strong>Note: </strong>Here we initialised the particles with a velocity for visualising, we’ll initialise them with zero velocity when it comes to actually optimising.
+    <strong>Note: </strong>We initialised the particles with a velocity for visualising but we’ll initialise them with zero velocity when it comes to actually optimising.
 </div>
 
 </div>
@@ -2440,11 +2440,14 @@ if (root.Bokeh !== undefined) {
     
     
 <div class="cell border-box-sizing code_cell rendered">
+<details class="description" open="">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p></p>
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">particles</span><span class="c1">#collapse-show</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-show</span>
 <span class="k">def</span> <span class="nf">new_pop_event</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
     <span class="k">global</span> <span class="n">pso</span>
     <span class="n">size</span> <span class="o">=</span> <span class="n">population_size_slider</span><span class="o">.</span><span class="n">value</span>
@@ -2464,6 +2467,7 @@ if (root.Bokeh !== undefined) {
 </div>
 </div>
 
+    </details>
 </div>
     
 
@@ -2478,11 +2482,15 @@ if (root.Bokeh !== undefined) {
     
     
 <div class="cell border-box-sizing code_cell rendered">
+<details class="description" open="">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p></p>
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">instructions</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">pane</span><span class="o">.</span><span class="n">Markdown</span><span class="p">(</span><span class="s1">'''</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-show</span>
+<span class="n">instructions</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">pane</span><span class="o">.</span><span class="n">Markdown</span><span class="p">(</span><span class="s1">'''</span>
 <span class="s1"># Particle Swarm Optimisation Dashboard </span>
 <span class="s1">## Instructions: </span>
 <span class="s1">1. **Click on the plot to place the target.** </span>
@@ -2510,6 +2518,7 @@ if (root.Bokeh !== undefined) {
 </div>
 </div>
 
+    </details>
 <div class="output_wrapper">
 <div class="output">
 
@@ -2601,11 +2610,12 @@ if (root.Bokeh !== undefined) {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Particle Swarm Optimisation is a really intesting algorithm which was built while trying to build a simiplified model of social interactions. The original aim was to create an algorithm in which the particles would behave like flocking birds. Here's a link if you'd like to <a href="http://ai.unibo.it/sites/ai.unibo.it/files/u11/pso.pdf">read the original paper</a>.</p>
-<p>We've seen how each particle has a velocity and position, and the position represents a potential solution to your problem. For updating the velocities, each particle uses its current position, its own fittest position and the fittest positions of other particles.</p>
-<p>We've also looked at <a href="https://www.anaconda.com/">Anaconda</a>'s <a href="https://holoviz.org/">HoloViz</a> tools (HoloViews, Panel and Bokeh). Using these we build an interactive dashboard which shows all the particles updating!</p>
-<p>I personally love learning about these kind of algorithms and finding ways to interact with them visually. What do you think about these nature-inspired algorithms? Did you learn a bit about creating interactive visualisations in Python by reading this article? If so, feel free to <a href="https://ctt.ac/1Uv0f">share it</a>, and you’re also more than welcome to contact me (via <a href="https://twitter.com/_ScottCondron">Twitter</a>) if you have any questions, comments, or feedback.</p>
-<p>And finally, <strong>here's the dashboard deployed on PyViz examples: <a href="https://particle-swarm-optimisation.pyviz.demo.anaconda.com/pso">https://particle-swarm-optimisation.pyviz.demo.anaconda.com/pso</a></strong>
-Thanks a lot to the team at Anaconda for their great tools and for deploying this <img class="emoji" title=":heart:" alt=":heart:" src="https://github.githubassets.com/images/icons/emoji/unicode/2764.png" height="20" width="20">!</p>
+<p>We've built PSO from the ground up and have seen how <strong>Swarm Intelligence</strong> emerges!</p>
+<p>We've also looked at <a href="https://www.anaconda.com/">Anaconda</a>'s <a href="https://holoviz.org/">HoloViz</a> tools (HoloViews, Panel and Bokeh). Using these <strong>we built an interactive dashboard which shows all the particles updating!</strong></p>
+<p>I personally love learning about these kind of algorithms and finding ways to interact with them visually. I'd love to hear from you. What do you think about these nature-inspired algorithms? Did you learn a bit about creating interactive visualisations in Python by reading this article?</p>
+<p>If so, feel free to <a href="https://ctt.ac/1Uv0f">share it</a>, and you’re also more than welcome to contact me (via <a href="https://twitter.com/_ScottCondron">Twitter</a>) if you have any questions, comments, or feedback.</p>
+<p>And finally, <strong>here's the dashboard deployed on PyViz examples: <a href="https://particle-swarms.pyviz.demo.anaconda.com/pso">https://particle-swarms.pyviz.demo.anaconda.com/pso</a></strong></p>
+<p><strong>Thanks a lot to the team at Anaconda</strong> for their great tools and for deploying this <img class="emoji" title=":heart:" alt=":heart:" src="https://github.githubassets.com/images/icons/emoji/unicode/2764.png" height="20" width="20">!</p>
 <p><strong>Thanks for reading!</strong> <img class="emoji" title=":rocket:" alt=":rocket:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f680.png" height="20" width="20"></p>
 
 </div>
