@@ -35,7 +35,7 @@ layout: notebook
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>I'm hoping it's to read about <strong>Swarm Intelligence!</strong> I'm also hoping you're interested to read about the <strong><em>interactive dashboard</em></strong> side of things too so we can play with it at the end.</p>
-<p>If that sounds like too much and you just want to play with it now, you can use it on PyViz examples here: <a href="https://particle-swarm-optimisation.pyviz.demo.anaconda.com/pso">https://particle-swarm-optimisation.pyviz.demo.anaconda.com/pso</a></p>
+<p>If that sounds like too much and you just want to play with it now, <strong>you can use it on PyViz examples here: <a href="https://particle-swarms.pyviz.demo.anaconda.com/pso">https://particle-swarms.pyviz.demo.anaconda.com/pso</a></strong></p>
 <p>We're going to build the dashboard using some of <a href="https://www.anaconda.com/">Anacondas</a>'s <a href="https://holoviz.org/">HoloViz</a> tools (Holoviews, Panel and Bokeh) to <strong>get the result from the tweet below.</strong></p>
 
 </div>
@@ -43,7 +43,7 @@ layout: notebook
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>{% include twitter.html content='<a href="https://twitter.com/_ScottCondron/status/1288199199029420034">https://twitter.com/_ScottCondron/status/1288199199029420034</a>' %}</p>
+<p>{% include twitter.html content='<a href="https://twitter.com/_ScottCondron/status/1293605204013846530">https://twitter.com/_ScottCondron/status/1293605204013846530</a>' %}</p>
 
 </div>
 </div>
@@ -209,10 +209,10 @@ layout: notebook
 
 
 
-<div id="5da93e16-286d-4025-af96-dbaf1f95b16d"></div>
+<div id="2c21a80e-6bbf-4555-9810-57498b6caa0f"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#5da93e16-286d-4025-af96-dbaf1f95b16d');
+var element = $('#2c21a80e-6bbf-4555-9810-57498b6caa0f');
 
 (function(root) {
   function now() {
@@ -1388,10 +1388,10 @@ var element = $('#5da93e16-286d-4025-af96-dbaf1f95b16d');
 
 
 
-<div id="70b85c86-aae0-45b4-99d0-b8619e81300f"></div>
+<div id="45ce33ac-8ee8-4ca5-bbd2-25783ee1352a"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#70b85c86-aae0-45b4-99d0-b8619e81300f');
+var element = $('#45ce33ac-8ee8-4ca5-bbd2-25783ee1352a');
 
 if ((window.PyViz === undefined) || (window.PyViz instanceof HTMLElement)) {
   window.PyViz = {comms: {}, comm_status:{}, kernels:{}, receivers: {}, plot_index: []}
@@ -1796,14 +1796,14 @@ if (root.Bokeh !== undefined) {
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="https://www.scottcondron.com/images/copied_from_nb/my_icons/static_pso.png" alt="static_pso.png" title="Particles with velocity arrow"></p>
+<p><img src="https://www.scottcondron.com/images/copied_from_nb/my_icons/static_pso.png" alt="static_pso.png" title="Particles with an arrow showing their velocity."></p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>{% include note.html content='Here we initialised the particles with a velocity for visualising, we&#8217;ll initialise them with zero velocity when it comes to actually optimising.' %}</p>
+<p>{% include note.html content='We initialised the particles with a velocity for visualising but we&#8217;ll initialise them with zero velocity when it comes to actually optimising.' %}</p>
 
 </div>
 </div>
@@ -2317,11 +2317,13 @@ if (root.Bokeh !== undefined) {
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
+<details class="description" open>
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">particles</span><span class="c1">#collapse-show</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-show</span>
 <span class="k">def</span> <span class="nf">new_pop_event</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
     <span class="k">global</span> <span class="n">pso</span>
     <span class="n">size</span> <span class="o">=</span> <span class="n">population_size_slider</span><span class="o">.</span><span class="n">value</span>
@@ -2340,7 +2342,8 @@ if (root.Bokeh !== undefined) {
     </div>
 </div>
 </div>
-
+</p>
+    </details>
 </div>
     {% endraw %}
 
@@ -2353,11 +2356,14 @@ if (root.Bokeh !== undefined) {
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
+<details class="description" open>
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">instructions</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">pane</span><span class="o">.</span><span class="n">Markdown</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-show</span>
+<span class="n">instructions</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">pane</span><span class="o">.</span><span class="n">Markdown</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="s1"># Particle Swarm Optimisation Dashboard </span>
 <span class="s1">## Instructions: </span>
 <span class="s1">1. **Click on the plot to place the target.** </span>
@@ -2384,7 +2390,8 @@ if (root.Bokeh !== undefined) {
     </div>
 </div>
 </div>
-
+</p>
+    </details>
 <div class="output_wrapper">
 <div class="output">
 
@@ -2471,11 +2478,12 @@ if (root.Bokeh !== undefined) {
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Particle Swarm Optimisation is a really intesting algorithm which was built while trying to build a simiplified model of social interactions. The original aim was to create an algorithm in which the particles would behave like flocking birds. Here's a link if you'd like to <a href="http://ai.unibo.it/sites/ai.unibo.it/files/u11/pso.pdf">read the original paper</a>.</p>
-<p>We've seen how each particle has a velocity and position, and the position represents a potential solution to your problem. For updating the velocities, each particle uses its current position, its own fittest position and the fittest positions of other particles.</p>
-<p>We've also looked at <a href="https://www.anaconda.com/">Anaconda</a>'s <a href="https://holoviz.org/">HoloViz</a> tools (HoloViews, Panel and Bokeh). Using these we build an interactive dashboard which shows all the particles updating!</p>
-<p>I personally love learning about these kind of algorithms and finding ways to interact with them visually. What do you think about these nature-inspired algorithms? Did you learn a bit about creating interactive visualisations in Python by reading this article? If so, feel free to <a href="https://ctt.ac/1Uv0f">share it</a>, and you’re also more than welcome to contact me (via <a href="https://twitter.com/_ScottCondron">Twitter</a>) if you have any questions, comments, or feedback.</p>
-<p>And finally, <strong>here's the dashboard deployed on PyViz examples: <a href="https://particle-swarm-optimisation.pyviz.demo.anaconda.com/pso">https://particle-swarm-optimisation.pyviz.demo.anaconda.com/pso</a></strong>
-Thanks a lot to the team at Anaconda for their great tools and for deploying this :heart:!</p>
+<p>We've built PSO from the ground up and have seen how <strong>Swarm Intelligence</strong> emerges!</p>
+<p>We've also looked at <a href="https://www.anaconda.com/">Anaconda</a>'s <a href="https://holoviz.org/">HoloViz</a> tools (HoloViews, Panel and Bokeh). Using these <strong>we built an interactive dashboard which shows all the particles updating!</strong></p>
+<p>I personally love learning about these kind of algorithms and finding ways to interact with them visually. I'd love to hear from you. What do you think about these nature-inspired algorithms? Did you learn a bit about creating interactive visualisations in Python by reading this article?</p>
+<p>If so, feel free to <a href="https://ctt.ac/1Uv0f">share it</a>, and you’re also more than welcome to contact me (via <a href="https://twitter.com/_ScottCondron">Twitter</a>) if you have any questions, comments, or feedback.</p>
+<p>And finally, <strong>here's the dashboard deployed on PyViz examples: <a href="https://particle-swarms.pyviz.demo.anaconda.com/pso">https://particle-swarms.pyviz.demo.anaconda.com/pso</a></strong></p>
+<p><strong>Thanks a lot to the team at Anaconda</strong> for their great tools and for deploying this :heart:!</p>
 <p><strong>Thanks for reading!</strong> :rocket:</p>
 
 </div>
