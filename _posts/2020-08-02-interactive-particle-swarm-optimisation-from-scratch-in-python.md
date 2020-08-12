@@ -35,7 +35,7 @@ layout: notebook
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>I'm hoping it's to read about <strong>Swarm Intelligence!</strong> I'm also hoping you're interested to read about the <strong><em>interactive dashboard</em></strong> side of things too so we can play with it at the end.</p>
-<p>If that sounds like too much and you just want to play with it now, <strong>you can use it on PyViz examples here: <a href="https://particle-swarms.pyviz.demo.anaconda.com/pso">https://particle-swarms.pyviz.demo.anaconda.com/pso</a></strong></p>
+<p>If that sounds like too much and you just want to play with it now, <strong>you can use it on PyViz examples here: <a href="https://particle-swarms.pyviz.demo.anaconda.com">https://particle-swarms.pyviz.demo.anaconda.com</a></strong></p>
 <p>We're going to build the dashboard using some of <a href="https://www.anaconda.com/">Anacondas</a>'s <a href="https://holoviz.org/">HoloViz</a> tools (Holoviews, Panel and Bokeh) to <strong>get the result from the tweet below.</strong></p>
 
 </div>
@@ -209,10 +209,10 @@ layout: notebook
 
 
 
-<div id="2c21a80e-6bbf-4555-9810-57498b6caa0f"></div>
+<div id="01a78cb1-e566-4554-b41b-6b086c8a5346"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#2c21a80e-6bbf-4555-9810-57498b6caa0f');
+var element = $('#01a78cb1-e566-4554-b41b-6b086c8a5346');
 
 (function(root) {
   function now() {
@@ -1388,10 +1388,10 @@ var element = $('#2c21a80e-6bbf-4555-9810-57498b6caa0f');
 
 
 
-<div id="45ce33ac-8ee8-4ca5-bbd2-25783ee1352a"></div>
+<div id="fe58e628-f00e-4e6d-9852-e60777ea0501"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#45ce33ac-8ee8-4ca5-bbd2-25783ee1352a');
+var element = $('#fe58e628-f00e-4e6d-9852-e60777ea0501');
 
 if ((window.PyViz === undefined) || (window.PyViz instanceof HTMLElement)) {
   window.PyViz = {comms: {}, comm_status:{}, kernels:{}, receivers: {}, plot_index: []}
@@ -2482,7 +2482,7 @@ if (root.Bokeh !== undefined) {
 <p>We've also looked at <a href="https://www.anaconda.com/">Anaconda</a>'s <a href="https://holoviz.org/">HoloViz</a> tools (HoloViews, Panel and Bokeh). Using these <strong>we built an interactive dashboard which shows all the particles updating!</strong></p>
 <p>I personally love learning about these kind of algorithms and finding ways to interact with them visually. I'd love to hear from you. What do you think about these nature-inspired algorithms? Did you learn a bit about creating interactive visualisations in Python by reading this article?</p>
 <p>If so, feel free to <a href="https://ctt.ac/1Uv0f">share it</a>, and you’re also more than welcome to contact me (via <a href="https://twitter.com/_ScottCondron">Twitter</a>) if you have any questions, comments, or feedback.</p>
-<p>And finally, <strong>here's the dashboard deployed on PyViz examples: <a href="https://particle-swarms.pyviz.demo.anaconda.com/pso">https://particle-swarms.pyviz.demo.anaconda.com/pso</a></strong></p>
+<p>And finally, <strong>here's the dashboard deployed on PyViz examples: <a href="https://particle-swarms.pyviz.demo.anaconda.com">https://particle-swarms.pyviz.demo.anaconda.com</a></strong></p>
 <p><strong>Thanks a lot to the team at Anaconda</strong> for their great tools and for deploying this :heart:!</p>
 <p><strong>Thanks for reading!</strong> :rocket:</p>
 
