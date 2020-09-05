@@ -5,6 +5,7 @@ title: Begin creating Deep Learning models.
 toc: false 
 badges: true
 comments: true
+image: images/copied_from_nb/my_icons/oliver.jpeg
 categories: [deep learning, ai]
 nb_path: _notebooks/2020-01-17-begin-creating-dl-models.ipynb
 layout: notebook

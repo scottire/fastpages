@@ -5,6 +5,7 @@ title: Interactive Genetic Algorithm Dashboard from Scratch in Python
 toc: true 
 badges: true
 comments: true
+image: images/copied_from_nb/my_icons/crossover.png
 categories: [jupyter, optimisation, visualisation]
 nb_path: _notebooks/2020-07-20-interactive-genetic-algorithm-dashboard-from-scratch-in-python.ipynb
 layout: notebook
@@ -133,10 +134,10 @@ layout: notebook
 
 
 
-<div id="8ce9598b-02fc-4cff-b54b-fc20e5afa138"></div>
+<div id="e3dac6d2-e4d1-4d98-add9-2cae5c727680"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#8ce9598b-02fc-4cff-b54b-fc20e5afa138');
+var element = $('#e3dac6d2-e4d1-4d98-add9-2cae5c727680');
 
 (function(root) {
   function now() {
@@ -1312,10 +1313,10 @@ var element = $('#8ce9598b-02fc-4cff-b54b-fc20e5afa138');
 
 
 
-<div id="b9645d9f-fb2d-4fdc-9b9e-fbf6384213d0"></div>
+<div id="1d257925-7bc3-4e77-b22d-c03a04f93e48"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#b9645d9f-fb2d-4fdc-9b9e-fbf6384213d0');
+var element = $('#1d257925-7bc3-4e77-b22d-c03a04f93e48');
 
 if ((window.PyViz === undefined) || (window.PyViz instanceof HTMLElement)) {
   window.PyViz = {comms: {}, comm_status:{}, kernels:{}, receivers: {}, plot_index: []}
@@ -1957,10 +1958,10 @@ To recap: a bunch from the current population are selected at random to compete 
 
 
 
-<div id="abc1ec78-3f81-4f14-a04e-cbaec3125b9e"></div>
+<div id="93346197-a9c8-45a4-9bc2-f77b6754b64f"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#abc1ec78-3f81-4f14-a04e-cbaec3125b9e');
+var element = $('#93346197-a9c8-45a4-9bc2-f77b6754b64f');
 
 (function(root) {
   function now() {
@@ -3136,10 +3137,10 @@ var element = $('#abc1ec78-3f81-4f14-a04e-cbaec3125b9e');
 
 
 
-<div id="c8d9ed35-255d-4432-b0b4-093b849245e4"></div>
+<div id="1deb12d4-4c0b-4434-9d1d-a4e6ce0d398b"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#c8d9ed35-255d-4432-b0b4-093b849245e4');
+var element = $('#1deb12d4-4c0b-4434-9d1d-a4e6ce0d398b');
 
 if ((window.PyViz === undefined) || (window.PyViz instanceof HTMLElement)) {
   window.PyViz = {comms: {}, comm_status:{}, kernels:{}, receivers: {}, plot_index: []}

@@ -5,6 +5,7 @@ title: This blog post was written in a Jupyter Notebook
 toc: false 
 badges: true
 comments: true
+image: images/copied_from_nb/my_icons/wave.png
 categories: [jupyter, blogging, visualisation]
 nb_path: _notebooks/2020-01-20-this-blog-post-was-written-in-a-jupyter-notebooks.ipynb
 layout: notebook

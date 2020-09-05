@@ -5,6 +5,7 @@ title: Interactive Particle Swarm Optimisation Dashboard from Scratch in Python
 toc: false 
 badges: true
 comments: true
+image: images/copied_from_nb/my_icons/static_pso.png
 categories: [jupyter, optimisation, visualisation]
 nb_path: _notebooks/2020-08-02-interactive-particle-swarm-optimisation-from-scratch-in-python.ipynb
 layout: notebook
@@ -209,10 +210,10 @@ layout: notebook
 
 
 
-<div id="01a78cb1-e566-4554-b41b-6b086c8a5346"></div>
+<div id="638a4f74-4cf1-4e90-a320-ec66426548e2"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#01a78cb1-e566-4554-b41b-6b086c8a5346');
+var element = $('#638a4f74-4cf1-4e90-a320-ec66426548e2');
 
 (function(root) {
   function now() {
@@ -1388,10 +1389,10 @@ var element = $('#01a78cb1-e566-4554-b41b-6b086c8a5346');
 
 
 
-<div id="fe58e628-f00e-4e6d-9852-e60777ea0501"></div>
+<div id="6592db86-2f6d-44e0-9418-54ce016602bf"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#fe58e628-f00e-4e6d-9852-e60777ea0501');
+var element = $('#6592db86-2f6d-44e0-9418-54ce016602bf');
 
 if ((window.PyViz === undefined) || (window.PyViz instanceof HTMLElement)) {
   window.PyViz = {comms: {}, comm_status:{}, kernels:{}, receivers: {}, plot_index: []}
