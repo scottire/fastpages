@@ -13,10 +13,11 @@
 <link rel="canonical" href="https://www.scottcondron.com/deep%20learning/ai/software%20development/2020/09/05/sd-to-ml.html" />
 <meta property="og:url" content="https://www.scottcondron.com/deep%20learning/ai/software%20development/2020/09/05/sd-to-ml.html" />
 <meta property="og:site_name" content="Scott Condron’s Blog" />
+<meta property="og:image" content="https://www.scottcondron.com/images/copied_from_nb/my_icons/neural-network.webp" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-09-05T00:00:00-05:00" />
 <script type="application/ld+json">
-{"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.scottcondron.com/deep%20learning/ai/software%20development/2020/09/05/sd-to-ml.html"},"description":"How I transitioned from Software Development to working with Machine Learning","@type":"BlogPosting","url":"https://www.scottcondron.com/deep%20learning/ai/software%20development/2020/09/05/sd-to-ml.html","headline":"Software Developer to Machine Learning Research Engineer","dateModified":"2020-09-05T00:00:00-05:00","datePublished":"2020-09-05T00:00:00-05:00","@context":"https://schema.org"}</script>
+{"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.scottcondron.com/deep%20learning/ai/software%20development/2020/09/05/sd-to-ml.html"},"description":"How I transitioned from Software Development to working with Machine Learning","@type":"BlogPosting","url":"https://www.scottcondron.com/deep%20learning/ai/software%20development/2020/09/05/sd-to-ml.html","headline":"Software Developer to Machine Learning Research Engineer","dateModified":"2020-09-05T00:00:00-05:00","datePublished":"2020-09-05T00:00:00-05:00","image":"https://www.scottcondron.com/images/copied_from_nb/my_icons/neural-network.webp","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://www.scottcondron.com/feed.xml" title="Scott Condron's Blog" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -34,10 +35,11 @@
 <link rel="canonical" href="https://www.scottcondron.com/deep%20learning/ai/software%20development/2020/09/05/sd-to-ml.html" />
 <meta property="og:url" content="https://www.scottcondron.com/deep%20learning/ai/software%20development/2020/09/05/sd-to-ml.html" />
 <meta property="og:site_name" content="Scott Condron’s Blog" />
+<meta property="og:image" content="https://www.scottcondron.com/images/copied_from_nb/my_icons/neural-network.webp" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-09-05T00:00:00-05:00" />
 <script type="application/ld+json">
-{"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.scottcondron.com/deep%20learning/ai/software%20development/2020/09/05/sd-to-ml.html"},"description":"How I transitioned from Software Development to working with Machine Learning","@type":"BlogPosting","url":"https://www.scottcondron.com/deep%20learning/ai/software%20development/2020/09/05/sd-to-ml.html","headline":"Software Developer to Machine Learning Research Engineer","dateModified":"2020-09-05T00:00:00-05:00","datePublished":"2020-09-05T00:00:00-05:00","@context":"https://schema.org"}</script>
+{"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.scottcondron.com/deep%20learning/ai/software%20development/2020/09/05/sd-to-ml.html"},"description":"How I transitioned from Software Development to working with Machine Learning","@type":"BlogPosting","url":"https://www.scottcondron.com/deep%20learning/ai/software%20development/2020/09/05/sd-to-ml.html","headline":"Software Developer to Machine Learning Research Engineer","dateModified":"2020-09-05T00:00:00-05:00","datePublished":"2020-09-05T00:00:00-05:00","image":"https://www.scottcondron.com/images/copied_from_nb/my_icons/neural-network.webp","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -97,25 +99,31 @@ window.onload = wrap_img;
 </head>
 <body><header class="site-header">
 
-  <div class="wrapper"><a class="site-title" rel="author" href="/">Scott Condron&#39;s Blog</a><nav class="site-nav">
-        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">Scott Condron's Blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
         <label for="nav-trigger">
           <span class="menu-icon">
-            <svg viewBox="0 0 18 15" width="18px" height="15px">
-              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
             </svg>
           </span>
         </label>
 
-        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
-      </nav></div>
+        <div class="trigger">
+<a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a>
+</div>
+      </nav>
+</div>
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Software Developer to Machine Learning Research Engineer</h1><p class="page-description">How I transitioned from Software Development to working with Machine Learning</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-09-05T00:00:00-05:00" itemprop="datePublished">
+    <h1 class="post-title p-name" itemprop="name headline">Software Developer to Machine Learning Research Engineer</h1>
+<p class="page-description">How I transitioned from Software Development to working with Machine Learning</p>
+<p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-09-05T00:00:00-05:00" itemprop="datePublished">
         Sep 5, 2020
       </time>
        • <span class="read-time" title="Estimated read time">
@@ -126,15 +134,15 @@ window.onload = wrap_img;
 </span></p>
 
     
-      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i> 
       
-        <a class="category-tags-link" href="/categories/#deep learning">deep learning</a>
-        &nbsp;
+        <a class="category-tags-link" href="/categories/#deep%20learning">deep learning</a>
+         
       
         <a class="category-tags-link" href="/categories/#ai">ai</a>
-        &nbsp;
+         
       
-        <a class="category-tags-link" href="/categories/#software development">software development</a>
+        <a class="category-tags-link" href="/categories/#software%20development">software development</a>
         
       
       </p>
@@ -160,92 +168,122 @@ window.onload = wrap_img;
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Introduction">Introduction<a class="anchor-link" href="#Introduction"> </a></h2>
+<h2 id="Introduction">Introduction<a class="anchor-link" href="#Introduction"> </a>
+</h2>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>If you're reading this, you're likely interested to read about my experience and help that inform whether it's something you should consider. I'll share why I decided to change paths and the steps I took to do so hopefully you will feel empowered to make the move yourself.</p>
+<p><img src="https://www.scottcondron.com/images/copied_from_nb/my_icons/neural-network.webp" alt="neural-network.webp" title="Source: pixabay.com"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If you're reading this, you're likely interested to read about my experience transitioning from Software Development to Machine Learning to inform whether it's something you should consider. I'll share why I decided to change paths and the steps I took to do so hopefully you will feel empowered to make the move yourself.</p>
 <p>TLDR: I did online courses which gave me the confidence to go back to university, after which I landed a ML research engineer job.</p>
 
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Finding-the-confidence">Finding the confidence<a class="anchor-link" href="#Finding-the-confidence"> </a></h2>
+<h2 id="Finding-the-confidence">Finding the confidence<a class="anchor-link" href="#Finding-the-confidence"> </a>
+</h2>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>I had been meaning to learn more about AI. I'd watch amazing products being released which boasted that they were "<em>powered by AI</em>", but I knew very little about it... other than that it was going to be cause of our species' downfall, of course.</p>
-<p>I was a Software Developer for 3 years and now I'm a Geoffrey Hinton clone, with a herd of autonomous bots at my fingertips. In reality, I'm building machine learning based applications for a company called <a href="https://www.speech-graphics.com/">Speech Graphics</a> in Edinburgh.</p>
-<p>If you take one thing from this post, it's that <strong>developing the confidence to take steps towards working with and understanding machine learning was the most important part of my experience</strong>. At first I  thought that it was reserved for PhD graduates and a lowly developer like me would need to wait until we can upload knowledge with a human-brain interface before I could understand it.</p>
+<p>I was a Software Developer for 3 years and now I'm a <a href="https://en.wikipedia.org/wiki/Geoffrey_Hinton">Geoffrey Hinton</a> clone, with a herd of autonomous bots at my fingertips. In reality, I'm building machine learning based applications for a company called <a href="https://www.speech-graphics.com/">Speech Graphics</a> in Edinburgh.</p>
+<p>If you take one thing from this post, it's that <strong>developing the confidence to take steps towards working with and understanding machine learning was the most important part of my experience</strong>. At first I  thought that it was reserved for PhD graduates and a someone like me would need to wait until we can upload knowledge with a human-brain interface before I could understand it.</p>
 <p>My way of building confidence was through doing online courses. I was very privileged that the company I worked for at the time, an amazing NFC startup called <a href="https://flomio.com/">Flomio</a>, were willing to let me bill hours watching an online course on machine learning. I followed <a href="http://fast.ai">fast.ai</a>'s "Practical Deep Learning for Coders" and then watched CS231n in my spare time.</p>
 <p>After that, although there was a fairly long road ahead, it was night and day. I had the <em>confidence</em> that the jelly in my skull didn't need any additional compute power to grasp it.</p>
 
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Things-that-helped">Things that helped<a class="anchor-link" href="#Things-that-helped"> </a></h2>
+<h2 id="Things-that-helped">Things that helped<a class="anchor-link" href="#Things-that-helped"> </a>
+</h2>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>If you already know how to code, you can be up and running training models in a day after watching the first lecture of <a href="http://fast.ai">fast.ai</a>. This "top down approach" really helps motivate continued learning by showing you what's possible. Having a software developer background really made things easier, you can gradually dive deeper into the different concepts, as you would with a new library or API.</p>
+<p>If you already know how to code, you can be up and running training models in a day after watching the first lecture of <a href="http://fast.ai">fast.ai</a>. Fast.ai's "top down approach" really helps motivate continued learning by showing you what's possible. Having a software developer background really made things easier, you can gradually dive deeper into the different concepts, as you would with a new library or API.</p>
 <p>Learning to use a language and a library at the same time can be a pain... first learn the language, then learn the libraries/APIs that are written with it. In my experience, this is true for machine learning too... once I had learned python, picking up <code>fastai</code> and <code>PyTorch</code> was much easier.</p>
-<p>Once I had a reasonable grasp of <code>fastai</code> and <code>PyTorch</code>, I looked around for university courses that might help me transition into a machine learning. Although it would’ve been nice to make the transition completely independently outside of institutions, I felt I would benefit from the structure of it.</p>
+<p>Once I had a reasonable grasp of <code>fastai</code> and <code>PyTorch</code>, I looked around for university courses that might help me transition into a machine learning. Although it would’ve been nice to make the transition completely independently outside of institutions, I felt I would benefit from the structure of it and having the degree would also help my job search.</p>
 <p><strong>This is by no means a "you need a degree" statement</strong>, the most valuable lessons I've learned has been from self-guided study online. Taking the risk financially was the hardest consideration for me. My only advice for this is to try and save as much as you can, and look for funding / scholarships where available.</p>
 
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><div class="flash">
-    <svg class="octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
-    <strong>Note: </strong>Tech is a male dominated profession <a href="https://medium.com/tech-diversity-files/if-you-think-women-in-tech-is-just-a-pipeline-problem-you-haven-t-been-paying-attention-cb7a2073b996">where women are more than twice as likely to quit as men (41% vs 17%)</a> so being a white male, I benefit from <a href="https://medium.com/@racheltho/how-to-make-tech-interviews-a-little-less-awful-c29f35431987">lots</a> <a href="https://medium.com/tech-diversity-files/thought-on-diversity-part-2-why-diversity-is-difficult-3dfd552fa1f7">of</a> <a href="https://medium.com/tech-diversity-files/the-real-reason-women-quit-tech-and-how-to-address-it-6dfb606929fd">other factors</a>.
-</div></p>
+<p></p>
+<div class="flash">
+    <svg class="octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info" viewbox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
+    <strong>Note: </strong>Tech is a male dominated industry <a href="https://medium.com/tech-diversity-files/if-you-think-women-in-tech-is-just-a-pipeline-problem-you-haven-t-been-paying-attention-cb7a2073b996">where women are more than twice as likely to quit as men (41% vs 17%)</a> so being a white male, I benefit from <a href="https://medium.com/@racheltho/how-to-make-tech-interviews-a-little-less-awful-c29f35431987">lots</a> <a href="https://medium.com/tech-diversity-files/thought-on-diversity-part-2-why-diversity-is-difficult-3dfd552fa1f7">of</a> <a href="https://medium.com/tech-diversity-files/the-real-reason-women-quit-tech-and-how-to-address-it-6dfb606929fd">other factors</a>.
+</div>
 
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Going-back-to-uni">Going back to uni<a class="anchor-link" href="#Going-back-to-uni"> </a></h2>
+<h2 id="Going-back-to-uni">Going back to uni<a class="anchor-link" href="#Going-back-to-uni"> </a>
+</h2>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>So I in enrolled in Artificial Intelligence with Speech and Multimodal Interaction MSc in Heriot Watt University, Edinburgh, Scotland. The course focused on big data applications, intro to data science, statistics, and one fancy module called Biologically Inspired Computation (see my previous two blog posts about <a href="https://www.scottcondron.com/jupyter/optimisation/visualisation/2020/07/20/interactive-genetic-algorithm-dashboard-from-scratch-in-python.html">Genetic Algorithm</a> and <a href="https://www.scottcondron.com/jupyter/optimisation/visualisation/2020/08/02/interactive-particle-swarm-optimisation-from-scratch-in-python.html">Particle Swarm Optimisation</a> for examples of that).</p>
 <p>You may notice that there wasn't a large amount of Deep Learning there. Although the fundamentals of neural networks were thought and we had to build a neural net from scratch, the online courses I did were a lot more practically useful than what I learned in university, especially fast.ai.</p>
+<p>Having had experience programming professionally and having learned many fundamentals from the different online courses, my university experience went a lot smoother than my undergraduate degree. There was lots of late nights and pretty much every weekend was spent doing assignments during the day, but honestly, I enjoyed the sense of purpose that pursuing the degree gave me.</p>
 
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<blockquote><p>One side note, if you do decide to go the university route, use <a href="https://apps.ankiweb.net/">ANKI</a> (spaced repetition) to study for exams. It is the closest I've been to being able to get to upload facts into my jelly brain.</p>
-</blockquote>
+<p></p>
+<div class="flash">
+    <svg class="octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info" viewbox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
+    <strong>Note: </strong>If you do decide to go the university route, use <a href="https://apps.ankiweb.net/">ANKI</a> (spaced repetition) to study for exams. It is the closest I’ve been to being able to get to upload facts into my jelly brain.
+</div>
 
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="The-Job-Search">The Job Search<a class="anchor-link" href="#The-Job-Search"> </a></h2>
+<h2 id="The-Job-Search">The Job Search<a class="anchor-link" href="#The-Job-Search"> </a>
+</h2>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>I added alerts for "Machine Learning" in Edinburgh on the LinkedIn job search feature and spammed my CV wherever matched. If you want to see the CV I send, <a href="https://twitter.com/_ScottCondron">DM me</a> and I'll be happy to share. I focused my search on smaller tech companies but I would take any interview offers I received.</p>
 <p>Most of the job applications were similar to the Software Developer interview process I had been through before. The main difference was questions would focus on machine learning concepts and the take home would be some data related task, e.g. building a classifier with the given data.</p>
@@ -256,27 +294,38 @@ window.onload = wrap_img;
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion"> </a></h2>
+<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion"> </a>
+</h2>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>In conclusion, I did a few online courses which gave me the confidence to go back to university, upon completion I interviewed for a few companies and settled on the one in which I thought I could learn the most. The whole process was one and a half years from start to finish. I made the decision to join Speech Graphics because machine learning is core to their product and they have a dedicated ML team so I knew I would be in a good position to learn a lot.</p>
+<p>To make this whole thing possible, there were many helpful people around me at all points throughout my transition. Between my girlfriend Kerri, my parents to my friends in uni and my dissertaion supervisor, I know its a cliche but I really wouldn't have been able to do it without each of them being so kind and helpful.</p>
 <p>I personally love reading about these kind of stories and finding out about peoples experiences doing something I am considering. Did you get any value from reading this article? If so (or if not), feel free to <a href="https://ctt.ac/4q7IH">share it</a>, and you’re also more than welcome to contact me (via <a href="https://twitter.com/_ScottCondron">Twitter</a>) if you have any questions, comments, or feedback.</p>
-<p>I hope my story has given you an insight into my perspective about switching paths.
-Thanks for reading!</p>
+<p>I hope my story has given you an insight into my perspective about switching paths.</p>
+<p><strong>Thanks for reading!</strong> <img class="emoji" title=":rocket:" alt=":rocket:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f680.png" height="20" width="20"></p>
 
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><a class="twitter-follow-button" href="https://twitter.com/_ScottCondron">
-Follow @_ScottCondron</a></p>
+<p><a href="https://twitter.com/_ScottCondron?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @_ScottCondron</a><script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<iframe src="https://scottcondron.substack.com/embed" width="480" height="320" style="border:1px solid #EEE; background:white;" frameborder="0" scrolling="no"></iframe>
 </div>
 </div>
 </div>
@@ -284,14 +333,9 @@ Follow @_ScottCondron</a></p>
 
 
 
-  </div><!-- from https://github.com/utterance/utterances -->
-<script src="https://utteranc.es/client.js"
-        repo="scottire/fastpages"
-        issue-term="title"
-        label="blogpost-comment"
-        theme="github-light"
-        crossorigin="anonymous"
-        async>
+  </div>
+<!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js" repo="scottire/fastpages" issue-term="title" label="blogpost-comment" theme="github-light" crossorigin="anonymous" async>
 </script><a class="u-url" href="/deep%20learning/ai/software%20development/2020/09/05/sd-to-ml.html" hidden></a>
 </article>
       </div>
@@ -315,7 +359,11 @@ Follow @_ScottCondron</a></p>
       </div>
     </div>
 
-    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/scottire" title="scottire"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/_ScottCondron" title="_ScottCondron"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+    <div class="social-links">
+<ul class="social-media-list">
+<li><a rel="me" href="https://github.com/scottire" title="scottire"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li>
+<li><a rel="me" href="https://twitter.com/_ScottCondron" title="_ScottCondron"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li>
+</ul>
 </div>
 
   </div>
