@@ -250,10 +250,10 @@ document.querySelector("#activateButton").addEventListener('click', bootstrapThe
 
 
 
-<div id="54234384-eaf9-41d8-8a35-8d0989ff68b6"></div>
+<div id="210ad39d-0f35-4f8c-9ab9-edba64b8039b"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#54234384-eaf9-41d8-8a35-8d0989ff68b6');
+var element = $('#210ad39d-0f35-4f8c-9ab9-edba64b8039b');
 
 (function(root) {
   function now() {
@@ -1429,10 +1429,10 @@ var element = $('#54234384-eaf9-41d8-8a35-8d0989ff68b6');
 
 
 
-<div id="9ab27205-92ae-4b8f-9aab-79343c9d47f7"></div>
+<div id="33013ddc-2159-45a5-9c9e-474fca956552"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#9ab27205-92ae-4b8f-9aab-79343c9d47f7');
+var element = $('#33013ddc-2159-45a5-9c9e-474fca956552');
 
 if ((window.PyViz === undefined) || (window.PyViz instanceof HTMLElement)) {
   window.PyViz = {comms: {}, comm_status:{}, kernels:{}, receivers: {}, plot_index: []}
