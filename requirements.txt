@@ -1,5 +1,5 @@
 python==3.6
-notebook==5.7.8
+notebook==6.1.5
 ipykernel==5.1.0
 holoviews==1.13.2
 panel==0.9.5
