@@ -1,0 +1,2368 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>But what are PyTorch DataLoaders really? | Scott Condron’s Blog</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="But what are PyTorch DataLoaders really?" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Creating custom ways (without magic) to order, batch and combine your data with PyTorch DataLoaders." />
+<meta property="og:description" content="Creating custom ways (without magic) to order, batch and combine your data with PyTorch DataLoaders." />
+<link rel="canonical" href="https://www.scottcondron.com/jupyter/visualisation/audio/2020/12/02/dataloaders-samplers-collate.html" />
+<meta property="og:url" content="https://www.scottcondron.com/jupyter/visualisation/audio/2020/12/02/dataloaders-samplers-collate.html" />
+<meta property="og:site_name" content="Scott Condron’s Blog" />
+<meta property="og:image" content="https://www.scottcondron.com/images/copied_from_nb/my_icons/magichat.jpg" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-12-02T00:00:00-06:00" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.scottcondron.com/jupyter/visualisation/audio/2020/12/02/dataloaders-samplers-collate.html"},"description":"Creating custom ways (without magic) to order, batch and combine your data with PyTorch DataLoaders.","@type":"BlogPosting","url":"https://www.scottcondron.com/jupyter/visualisation/audio/2020/12/02/dataloaders-samplers-collate.html","headline":"But what are PyTorch DataLoaders really?","dateModified":"2020-12-02T00:00:00-06:00","datePublished":"2020-12-02T00:00:00-06:00","image":"https://www.scottcondron.com/images/copied_from_nb/my_icons/magichat.jpg","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://www.scottcondron.com/feed.xml" title="Scott Condron's Blog" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-156469707-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>But what are PyTorch DataLoaders really? | Scott Condron’s Blog</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="But what are PyTorch DataLoaders really?" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Creating custom ways (without magic) to order, batch and combine your data with PyTorch DataLoaders." />
+<meta property="og:description" content="Creating custom ways (without magic) to order, batch and combine your data with PyTorch DataLoaders." />
+<link rel="canonical" href="https://www.scottcondron.com/jupyter/visualisation/audio/2020/12/02/dataloaders-samplers-collate.html" />
+<meta property="og:url" content="https://www.scottcondron.com/jupyter/visualisation/audio/2020/12/02/dataloaders-samplers-collate.html" />
+<meta property="og:site_name" content="Scott Condron’s Blog" />
+<meta property="og:image" content="https://www.scottcondron.com/images/copied_from_nb/my_icons/magichat.jpg" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-12-02T00:00:00-06:00" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.scottcondron.com/jupyter/visualisation/audio/2020/12/02/dataloaders-samplers-collate.html"},"description":"Creating custom ways (without magic) to order, batch and combine your data with PyTorch DataLoaders.","@type":"BlogPosting","url":"https://www.scottcondron.com/jupyter/visualisation/audio/2020/12/02/dataloaders-samplers-collate.html","headline":"But what are PyTorch DataLoaders really?","dateModified":"2020-12-02T00:00:00-06:00","datePublished":"2020-12-02T00:00:00-06:00","image":"https://www.scottcondron.com/images/copied_from_nb/my_icons/magichat.jpg","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://www.scottcondron.com/feed.xml" title="Scott Condron's Blog" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-156469707-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">Scott Condron's Blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger">
+<a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a>
+</div>
+      </nav>
+</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">But what are PyTorch DataLoaders really?</h1>
+<p class="page-description">Creating custom ways (without magic) to order, batch and combine your data with PyTorch DataLoaders.</p>
+<p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-12-02T00:00:00-06:00" itemprop="datePublished">
+        Dec 2, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      17 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i> 
+      
+        <a class="category-tags-link" href="/categories/#jupyter">jupyter</a>
+         
+      
+        <a class="category-tags-link" href="/categories/#visualisation">visualisation</a>
+         
+      
+        <a class="category-tags-link" href="/categories/#audio">audio</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/scottire/fastpages/tree/master/_notebooks/2020-12-02-dataloaders-samplers-collate.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/scottire/fastpages/master?filepath=_notebooks%2F2020-12-02-dataloaders-samplers-collate.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/binder.svg" alt="Open In Binder">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/scottire/fastpages/blob/master/_notebooks/2020-12-02-dataloaders-samplers-collate.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/colab.svg" alt="Open In Colab">
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h1"><a href="#DataLoaders-are-magic.">DataLoaders are magic. </a></li>
+<li class="toc-entry toc-h1"><a href="#What's-the-plan?">What's the plan? </a></li>
+<li class="toc-entry toc-h1">
+<a href="#What-are-DataLoaders-and-Datasets?">What are DataLoaders and Datasets? </a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#Use-__getitem__-and-__len__">Use __getitem__ and __len__ </a></li>
+<li class="toc-entry toc-h2"><a href="#%C2%A0Now-use-a-DataLoader"> Now use a DataLoader </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h1">
+<a href="#Samplers">Samplers </a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#%C2%A0SequentialSampler"> SequentialSampler </a></li>
+<li class="toc-entry toc-h2"><a href="#RandomSampler">RandomSampler </a></li>
+<li class="toc-entry toc-h2"><a href="#Custom-Sampler">Custom Sampler </a></li>
+<li class="toc-entry toc-h2"><a href="#%C2%A0A-slight-problem"> A slight problem </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h1">
+<a href="#BatchSampler">BatchSampler </a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#Custom-Batch-Sampler">Custom Batch Sampler </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h1">
+<a href="#Custom-Collate-Functions">Custom Collate Functions </a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#Input-to-your-collate-function">Input to your collate function </a></li>
+<li class="toc-entry toc-h2"><a href="#Another-slight-problem">Another slight problem </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h1"><a href="#Conclusion">Conclusion </a></li>
+</ul>
+<!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-12-02-dataloaders-samplers-collate.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="DataLoaders-are-magic.">
+<a class="anchor" href="#DataLoaders-are-magic." aria-hidden="true"><span class="octicon octicon-link"></span></a>DataLoaders are magic.<a class="anchor-link" href="#DataLoaders-are-magic."> </a>
+</h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>You can often get away with using something magical. You can bury your head in the sand and ignore the mysterious methods behind it, all while enjoying the benefits that come from this magic. But at some point, either curiousity will get the better of you or you'll be missing the flexibility you need, and you'll want to try to demystify the sorcery.</p>
+<p>In my opinion, the best libraries have an element of magic to them. They hide away some gory details with a little bit of polish and slight of hand that leave the world looking orderly and simple. The really great libraries allow you to peek behind the curtain at your own pace, slowly revealing the complexity and flexibility within.</p>
+<p>I believe PyTorch is one of those libraries. It has lots of composable abstractions that you can learn about independenlty which neatly layer together to make a powerful, customisable and elegant framework. In this tutorial, we're going to dive into some of the details of PyTorch <code>DataLoader</code>s in the hopes of discovering how it works behind the scenes and how we can customise it to our liking.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="https://www.scottcondron.com/images/copied_from_nb/my_icons/magichat.jpg" alt="magichat.jpg" title="Magic!"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="What's-the-plan?">
+<a class="anchor" href="#What's-the-plan?" aria-hidden="true"><span class="octicon octicon-link"></span></a>What's the plan?<a class="anchor-link" href="#What's-the-plan?"> </a>
+</h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>PyTorch <code>DataLoader</code>s are great for iterating over batches of a <code>Dataset</code> like:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+<pre><code>for xb, yb in dataloader:
+    ...</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>where <code>xb</code> and <code>yb</code> are <em>batches</em> of your inputs and labels.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This tutorial is going to be about some of the more advanced features of <code>DataLoader</code>s which should explain what happens behind the scenes when you iterate over your dataloaders and help you customise different parts of that using PyTorch native features.</p>
+<p>To be specific, we're going to go over <strong>custom collate functions</strong> and <a href="https://pytorch.org/docs/stable/data.html?highlight=dataset#torch.utils.data.Sampler"><strong>Sampler</strong></a>s.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="What-are-DataLoaders-and-Datasets?">
+<a class="anchor" href="#What-are-DataLoaders-and-Datasets?" aria-hidden="true"><span class="octicon octicon-link"></span></a>What are <code>DataLoader</code>s and <code>Dataset</code>s?<a class="anchor-link" href="#What-are-DataLoaders-and-Datasets?"> </a>
+</h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For this tutorial to be useful, you should probably know what <code>DataLoader</code>s and <code>Dataset</code>s are but I will refresh your memory. For a deeper dive, I recommend Jeremy Howard's tutorial <a href="https://pytorch.org/tutorials/beginner/nn_tutorial.html">What is torch.nn <em>really</em> ?</a> and the PyTorch docs <a href="https://pytorch.org/tutorials/beginner/data_loading_tutorial.html">Writing Custom Datasets, DataLoaders and Transforms</a>.</p>
+<p>A quick refresher: PyTorch <a href="https://pytorch.org/docs/stable/data.html?highlight=dataset#torch.utils.data.Dataset">Dataset</a>s are just things that have a length and are indexable so that <code>len(dataset)</code> will work and <code>dataset[index]</code> will return a tuple of (x,y).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here's a little example that's mostly taken from <a href="https://github.com/fastai/fastbook">fastbook</a> Chapter 4 to just quickly illustrate how simple a <a href="https://pytorch.org/docs/stable/data.html?highlight=dataset#torch.utils.data.Dataset">Dataset</a> is:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>So we'll create two lists for x and y values:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">ys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'xs values: '</span><span class="p">,</span> <span class="n">xs</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'ys values: '</span><span class="p">,</span> <span class="n">ys</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>xs values:  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+ys values:  [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Then we use Python's <code>zip</code> function to combine them so <code>dataset[index]</code> returns <code>(x,y)</code> for that index:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span><span class="n">ys</span><span class="p">))</span>
+<span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># returns the tuple (x[0], y[0])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(0, 10)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>10</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Use-__getitem__-and-__len__">
+<a class="anchor" href="#Use-__getitem__-and-__len__" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use <code>__getitem__</code> and <code>__len__</code><a class="anchor-link" href="#Use-__getitem__-and-__len__"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We could also get the same functionality by using a class with the "dunder/magic methods" <code>__getitem__</code> (for <code>dataset[index]</code> functionality) and <code>__len__</code> (for <code>len(dataset)</code> functionality)</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description" open="">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p></p>
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-show</span>
+
+<span class="k">class</span> <span class="nc">MyDataset</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xs</span> <span class="o">=</span> <span class="n">xs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ys</span> <span class="o">=</span> <span class="n">ys</span>
+    
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">xs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">ys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xs</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+    </details>
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">MyDataset</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">)</span>
+<span class="n">dataset</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="c1"># returns the tuple (x[2], y[2])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(2, 12)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>10</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id=" Now-use-a-DataLoader">
+<a class="anchor" href="#%C2%A0Now-use-a-DataLoader" aria-hidden="true"><span class="octicon octicon-link"></span></a> Now use a <code>DataLoader</code><a class="anchor-link" href="#%C2%A0Now-use-a-DataLoader"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Then we just wrap that in a <a href="https://pytorch.org/docs/stable/data.html?highlight=dataset#torch.utils.data.DataLoader">DataLoader</a> and we can iterate it but <em>now</em> they're magically <code>tensors</code> and we can use <code>DataLoader</code>s handy configurations like shuffling, batching, multi-processing, etc.:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
+
+<span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>tensor([0]) tensor([10])
+tensor([1]) tensor([11])
+tensor([2]) tensor([12])
+tensor([3]) tensor([13])
+tensor([4]) tensor([14])
+tensor([5]) tensor([15])
+tensor([6]) tensor([16])
+tensor([7]) tensor([17])
+tensor([8]) tensor([18])
+tensor([9]) tensor([19])
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>But the real fun is that we can get <em>batches</em> of these by setting <code>batch_size</code>:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>tensor([0, 1]) tensor([10, 11])
+tensor([2, 3]) tensor([12, 13])
+tensor([4, 5]) tensor([14, 15])
+tensor([6, 7]) tensor([16, 17])
+tensor([8, 9]) tensor([18, 19])
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><em>And</em> we can shuffle these batches by just setting <code>shuffle=True</code>:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>tensor([2, 5]) tensor([12, 15])
+tensor([7, 9]) tensor([17, 19])
+tensor([1, 4]) tensor([11, 14])
+tensor([0, 6]) tensor([10, 16])
+tensor([8, 3]) tensor([18, 13])
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As you can see, it doesn't just shuffle the batches but instead, it shuffles the data and <em>then</em> batches.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>OK... but can we customise this shuffling or batching??? Yes, we can customise the shuffling with a custom <a href="https://pytorch.org/docs/stable/data.html?highlight=dataset#torch.utils.data.Sampler"><strong>Sampler</strong></a> and we can customise the batching with a <strong>custom collate function</strong>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Samplers">
+<a class="anchor" href="#Samplers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Samplers<a class="anchor-link" href="#Samplers"> </a>
+</h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Every <code>DataLoader</code> has a <code>Sampler</code> which is used internally to get the indices for each batch. Each index is used to index into your <code>Dataset</code> to grab the data (x, y). You can ignore this for now, but <code>DataLoader</code>s also have a <code>batch_sampler</code> which returns the indices for each batch in a list if <code>batch_size</code> is greater than 1.</p>
+<p>Don't worry if this is a bit confusing, it'll be more clear after a few examples hopefully:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's have a look at the internal <code>.sampler</code> property of a few <code>DataLoader</code>s and see how it changes when the DataLoader configurations change:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id=" SequentialSampler">
+<a class="anchor" href="#%C2%A0SequentialSampler" aria-hidden="true"><span class="octicon octicon-link"></span></a> SequentialSampler<a class="anchor-link" href="#%C2%A0SequentialSampler"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>When <code>shuffle=False</code>(default) with <code>batch_size=0</code>, the <code>sampler</code> returns each index in <code>0,1,2,3,4...</code> as you iterate.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">default_sampler</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span><span class="o">.</span><span class="n">sampler</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>So when we iterate over the sampler we should get the indices:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">default_sampler</span><span class="p">:</span>
+    <span class="c1"># iterating over the SequentialSampler</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>👍</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">default_sampler</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>torch.utils.data.sampler.SequentialSampler</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can see it has a <code>sampler</code> property internally which is a <code>SequentialSampler</code>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's import <code>SequentialSampler</code> to see if we can use it ourself:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">torch.utils.data.sampler</span> <span class="kn">import</span> <span class="n">SequentialSampler</span>
+
+<span class="n">sampler</span> <span class="o">=</span> <span class="n">SequentialSampler</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sampler</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Great, what about when <code>shuffle=True</code>?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="RandomSampler">
+<a class="anchor" href="#RandomSampler" aria-hidden="true"><span class="octicon octicon-link"></span></a>RandomSampler<a class="anchor-link" href="#RandomSampler"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>When shuffled, we should expect randomly shuffled indices:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">random_sampler</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">sampler</span>
+<span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">random_sampler</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>3
+0
+7
+5
+2
+4
+6
+9
+8
+1
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>So <code>shuffle=True</code> changes the <code>sampler</code> internally, which returns random indices each iteration.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">random_sampler</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>torch.utils.data.sampler.RandomSampler</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can see it's a <code>RandomSampler</code> so let's import that and use it ourself.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">torch.utils.data.sampler</span> <span class="kn">import</span> <span class="n">RandomSampler</span>
+
+<span class="n">random_sampler</span> <span class="o">=</span> <span class="n">RandomSampler</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">random_sampler</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>9
+7
+0
+3
+2
+4
+6
+5
+8
+1
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can pass this in explicitly to a <code>DataLoader</code> using the <code>sampler</code> parameter like this:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dl</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">sampler</span><span class="o">=</span><span class="n">random_sampler</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">dl</span><span class="o">.</span><span class="n">sampler</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>2
+1
+0
+6
+8
+3
+9
+5
+7
+4
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>So we've seen that every <code>DataLoader</code> has a <code>sampler</code> internally which is either <code>SequentialSampler</code> or <code>RandomSampler</code> depending on the value of <code>shuffle</code>, and these are iterated over to get the indices of the <code>Dataset</code> to use.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Custom-Sampler">
+<a class="anchor" href="#Custom-Sampler" aria-hidden="true"><span class="octicon octicon-link"></span></a>Custom Sampler<a class="anchor-link" href="#Custom-Sampler"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>That's great and all, but what if we want to customise the order of the data, other than shuffled or sequential. That's where custom <code>Sampler</code>s come in.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>From the docs:</p>
+<blockquote>
+<p>Every <code>Sampler</code> subclass has to provide an <code>__iter__</code> method, providing a way to iterate over indices of dataset elements, and a <code>__len__</code> method that returns the length of the returned iterators.</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>So all we have to do to create a custom sampler is subclass <code>Sampler</code> and have a <code>__iter__</code> method (for iterating through the indices) and a <code>__len__</code> method for the length.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As a small toy example, say we wanted the <strong>first half of the dataset to always happen first</strong>, then the <strong>second half to happen later in training</strong> and we still to shuffle these two halfs independently:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p></p>
+<div class="flash">
+    <svg class="octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info" viewbox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
+    <strong>Note: </strong>Making the order of the data less random is generally bad for training neural networks but let’s forget about that for this example please.
+</div>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p></p>
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data.sampler</span> <span class="kn">import</span> <span class="n">Sampler</span>
+
+<span class="k">class</span> <span class="nc">IndependentHalvesSampler</span><span class="p">(</span><span class="n">Sampler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">):</span>
+        <span class="n">halfway_point</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">first_half_indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">halfway_point</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">second_half_indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">halfway_point</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)))</span>
+        
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">first_half_indices</span><span class="p">)</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">second_half_indices</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">first_half_indices</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">second_half_indices</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">first_half_indices</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">second_half_indices</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+    </details>
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>So we've subclassed <code>Sampler</code>, we've stored the both halves of the indices in two lists and when <code>__iter__</code> is called (whenever the sampler is iterated over), it'll shuffle them independently and return an iterator of the two lists merged.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">our_sampler</span> <span class="o">=</span> <span class="n">IndependentHalvesSampler</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'First half indices: '</span><span class="p">,</span> <span class="n">our_sampler</span><span class="o">.</span><span class="n">first_half_indices</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Second half indices:'</span><span class="p">,</span> <span class="n">our_sampler</span><span class="o">.</span><span class="n">second_half_indices</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>First half indices:  [0, 1, 2, 3, 4]
+Second half indices: [5, 6, 7, 8, 9]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">our_sampler</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1
+2
+4
+3
+0
+7
+9
+8
+5
+6
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>So you can see that a shuffled [0,1,2,3,4] happen first, and then a shuffled [5, 6, 7, 8, 9] happen last.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>And we can pass it to a <code>DataLoader</code> like so:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dl</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">sampler</span><span class="o">=</span><span class="n">our_sampler</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">xb</span><span class="p">,</span> <span class="n">yb</span> <span class="ow">in</span> <span class="n">dl</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">xb</span><span class="p">,</span> <span class="n">yb</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>tensor([4]) tensor([14])
+tensor([0]) tensor([10])
+tensor([1]) tensor([11])
+tensor([3]) tensor([13])
+tensor([2]) tensor([12])
+tensor([7]) tensor([17])
+tensor([8]) tensor([18])
+tensor([5]) tensor([15])
+tensor([6]) tensor([16])
+tensor([9]) tensor([19])
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>So we've seen what's responsible for the <em>order</em> of the indices and we've seen how PyTorch uses <code>Sampler</code>s internally. We've also seen how to create our own <code>Sampler</code> subclass and pass it to PyTorch's <code>DataLoader</code>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id=" A-slight-problem">
+<a class="anchor" href="#%C2%A0A-slight-problem" aria-hidden="true"><span class="octicon octicon-link"></span></a> A slight problem<a class="anchor-link" href="#%C2%A0A-slight-problem"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>You may have noticed a small problem above, if I make the batch size &gt; half of the dataset, some indices in the two halves of the dataset will be appear in the same batch.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">batch_size</span><span class="o">=</span><span class="mi">7</span>
+<span class="n">dl</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">sampler</span><span class="o">=</span><span class="n">our_sampler</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">xb</span><span class="p">,</span> <span class="n">yb</span> <span class="ow">in</span> <span class="n">dl</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">xb</span><span class="p">,</span> <span class="n">yb</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>tensor([4, 2, 0, 3, 1, 5, 7]) tensor([14, 12, 10, 13, 11, 15, 17])
+tensor([8, 6, 9]) tensor([18, 16, 19])
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This goes against our original goal because we wanted the <strong>first half of the dataset to always happen first</strong>. Let's say we want all batches in the first half to be separate from the second half... that's where <code>batch_sampler</code>s come in.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="BatchSampler">
+<a class="anchor" href="#BatchSampler" aria-hidden="true"><span class="octicon octicon-link"></span></a>BatchSampler<a class="anchor-link" href="#BatchSampler"> </a>
+</h1>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">default_batch_sampler</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span><span class="o">.</span><span class="n">batch_sampler</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">batch_indices</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">default_batch_sampler</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Batch #</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1"> indices: '</span><span class="p">,</span> <span class="n">batch_indices</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Batch #0 indices:  [0, 1, 2]
+Batch #1 indices:  [3, 4, 5]
+Batch #2 indices:  [6, 7, 8]
+Batch #3 indices:  [9]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Internally, PyTorch uses a <code>BatchSampler</code> to chunk together <strong>the indices into batches</strong>. We can make custom <code>Sampler</code>s which return <em>batches</em> of indices and pass them using the <code>batch_sampler</code> argument. This is a bit more powerful in terms of customisation than <code>sampler</code> because <strong>you can choose both the <em>order</em> and the <em>batches</em> at the same time</strong>.</p>
+<p>For example, say for some reason you wanted to only batch certain things together (like only if they're the same length), or if you wanted to show some examples more often than other, a custom <code>BatchSampler</code> is great for this.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>So rather than returning each index separately, the <code>batch_sampler</code> <strong>iterates through batches of indices</strong>. PyTorch uses the <code>sampler</code> internally to select the order, and the <code>batch_sampler</code> to batch together <code>batch_size</code> amount of indices.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">default_batch_sampler</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>torch.utils.data.sampler.BatchSampler</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can see it's a <code>BatchSampler</code> internally. Let's import this to see what it does:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">torch.utils.data.sampler</span> <span class="kn">import</span> <span class="n">BatchSampler</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here's the <code>BatchSampler</code> docstring:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">BatchSampler</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Wraps another sampler to yield a mini-batch of indices.
+
+    Args:
+        sampler (Sampler): Base sampler.
+        batch_size (int): Size of mini-batch.
+        drop_last (bool): If ``True``, the sampler will drop the last batch if
+            its size would be less than ``batch_size``
+
+    Example:
+        &gt;&gt;&gt; list(BatchSampler(SequentialSampler(range(10)), batch_size=3, drop_last=False))
+        [[0, 1, 2], [3, 4, 5], [6, 7, 8], [9]]
+        &gt;&gt;&gt; list(BatchSampler(SequentialSampler(range(10)), batch_size=3, drop_last=True))
+        [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
+    
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>So you can initialise it with a <code>Sampler</code>, <code>batch_size</code> and <code>drop_last</code> (whether to remove the last batch), and it will return batches of indices when you iterate over it.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">batch_sampler</span> <span class="o">=</span> <span class="n">BatchSampler</span><span class="p">(</span><span class="n">our_sampler</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">drop_last</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">batch_indices</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">batch_sampler</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Batch #</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1"> indices: '</span><span class="p">,</span> <span class="n">batch_indices</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Batch #0 indices:  [2, 4]
+Batch #1 indices:  [1, 3]
+Batch #2 indices:  [0, 9]
+Batch #3 indices:  [8, 6]
+Batch #4 indices:  [5, 7]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As you can see, we can pass our custom <code>Sampler</code> to <code>BatchSampler</code> to control the order, and leave it responsible for batching the indices. We can then pass it to a <code>DataLoader</code> in the <code>batch_sampler</code> argument.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Custom-Batch-Sampler">
+<a class="anchor" href="#Custom-Batch-Sampler" aria-hidden="true"><span class="octicon octicon-link"></span></a>Custom Batch Sampler<a class="anchor-link" href="#Custom-Batch-Sampler"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Similar to a custom <code>sampler</code>, you can also create a <code>batch_sampler</code>. Why? If for some reason you wanted to only batch certain things together (like only if they're the same length), or if you wanted to show some examples more often than others, a custom <code>BatchSampler</code> is great for this.</p>
+<p>To create a custom <code>batch_sampler</code>, we just do the same as we did with a custom <code>Sampler</code> but <strong>our iterator returns batches of indices</strong>, rather than individual indices.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's create a <code>BatchSampler</code> which only batches together values from the first half of our dataset.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">chunk</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">indices</span><span class="p">),</span> <span class="n">chunk_size</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">EachHalfTogetherBatchSampler</span><span class="p">(</span><span class="n">Sampler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">):</span>
+        <span class="n">halfway_point</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">first_half_indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">halfway_point</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">second_half_indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">halfway_point</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
+    
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">first_half_indices</span><span class="p">)</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">second_half_indices</span><span class="p">)</span>
+        <span class="n">first_half_batches</span>  <span class="o">=</span> <span class="n">chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">first_half_indices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
+        <span class="n">second_half_batches</span> <span class="o">=</span> <span class="n">chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">second_half_indices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
+        <span class="n">combined</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">first_half_batches</span> <span class="o">+</span> <span class="n">second_half_batches</span><span class="p">)</span>
+        <span class="n">combined</span> <span class="o">=</span> <span class="p">[</span><span class="n">batch</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">combined</span><span class="p">]</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">combined</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="n">combined</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">first_half_indices</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">second_half_indices</span><span class="p">))</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>So we've subclassed <code>Sampler</code>, we've stored the indices in two lists (as before) and when <code>__iter__</code> is called (whenever the <code>batch_sampler</code> is iterated over), it'll first batch them using a method we've called <code>chunk</code>.</p>
+<p>Then we merge the batches and finally, we shuffle the batches and return an iterator of them.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">each_half_together_batch_sampler</span> <span class="o">=</span> <span class="n">EachHalfTogetherBatchSampler</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">each_half_together_batch_sampler</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[1]
+[5]
+[8, 6]
+[7, 9]
+[4, 2]
+[0, 3]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Great, as we hoped, none of the first and second half are batched together.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>And <em>now</em>, we can pass this to <code>DataLoader</code> using the <code>batch_sampler</code> argument:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">xb</span><span class="p">,</span><span class="n">yb</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_sampler</span><span class="o">=</span><span class="n">each_half_together_batch_sampler</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Batch #</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">. x</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">:'</span><span class="p">,</span> <span class="n">xb</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'          y</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">:'</span><span class="p">,</span> <span class="n">yb</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Batch #0. x0: tensor([7, 5, 8])
+          y0: tensor([17, 15, 18])
+Batch #1. x1: tensor([9, 6])
+          y1: tensor([19, 16])
+Batch #2. x2: tensor([2, 0])
+          y2: tensor([12, 10])
+Batch #3. x3: tensor([3, 1, 4])
+          y3: tensor([13, 11, 14])
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Ok, great. That's how PyTorch chooses which elements in my <code>Dataset</code> to batch together... but where does that batching actually happen? And can we customise <em>that</em> ?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Custom-Collate-Functions">
+<a class="anchor" href="#Custom-Collate-Functions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Custom Collate Functions<a class="anchor-link" href="#Custom-Collate-Functions"> </a>
+</h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Internally, PyTorch uses a <strong>Collate Function</strong> to combine the data in your batches together (*see note). 
+By default, a function called <a href="https://github.com/pytorch/pytorch/blob/a03f05f2a28ee9516a26bab8e41351aeeb3a4d76/torch/utils/data/_utils/collate.py#L42">default_collate</a> checks what type of data your <code>Dataset</code> returns and tries it's best to combine them data into a batch like a (x_batch, y_batch).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p></p>
+<div class="flash">
+    <svg class="octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info" viewbox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
+    <strong>Note: </strong>For simplicity, we’re going to assume automatic batching is enabled. See the PyTorch docs for details about collate functions when automatic batching is disabled: <a href="https://pytorch.org/docs/stable/data.html#torch.utils.data.Sampler">https://pytorch.org/docs/stable/data.html#torch.utils.data.Sampler</a>
+</div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>But <strong>what if we had custom types or multiple different types of data</strong> which we wanted to handle which <code>default_collate</code> couldn't merge? We <em>could</em> edit our <code>Dataset</code> so that they are mergable and that's solves some of the types issues <strong>BUT</strong> what if how we merged them depended on 'batch-level' information like the largest value in the batch.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p></p>
+<div class="flash">
+    <svg class="octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info" viewbox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
+    <strong>Note: </strong>For other fancy uses of custom collate functions, there’s some cool examples in the popular <a href="https://github.com/huggingface/transformers/search?q=collate">huggingface/transformers</a> library.
+</div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For problems like these, custom collate functions are a handy way of solving them.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>From the PyTorch docs:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<blockquote>
+<p>Users may use customized <code>collate_fn</code> to achieve custom batching, e.g., collating along a dimension other than the first, padding sequences of various lengths, or adding support for custom data types.</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Input-to-your-collate-function">
+<a class="anchor" href="#Input-to-your-collate-function" aria-hidden="true"><span class="octicon octicon-link"></span></a>Input to your collate function<a class="anchor-link" href="#Input-to-your-collate-function"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>You will need to match your custom collate function with the output of indexing your <code>Dataset</code>. If you dataset returns a tuple <code>(x, y)</code> when indexed into (like <code>dataset[0]</code>), then your collate function will need to take a list of tuples like <code>[(x0,y0), (x4,y4), (x2,y2)... ]</code> which is <code>batch_size</code> in length.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>One thing that custom collate functions are often used for is for padding variable length batches. So let's change our dataset so that each x is a list, and they're all different sizes.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">([</span><span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xs</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[tensor([5]),
+ tensor([3, 8]),
+ tensor([7, 7, 1]),
+ tensor([2, 6, 5, 7]),
+ tensor([5, 1, 4, 0, 7]),
+ tensor([0, 1, 2, 1, 4, 9]),
+ tensor([2, 3, 0, 9, 3, 4, 4]),
+ tensor([2, 8, 8, 5, 7, 8, 2, 8]),
+ tensor([5, 4, 0, 2, 1, 9, 5, 3, 2]),
+ tensor([9, 2, 4, 7, 4, 3, 6, 6, 6, 7])]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span><span class="n">ys</span><span class="p">))</span>
+<span class="n">dataset</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(tensor([0, 1, 2, 1, 4, 9]), 15)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, if we try with the defaul collate function, it'll raise a <code>RuntimeError</code>.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">xb</span><span class="p">,</span> <span class="n">yb</span> <span class="ow">in</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">xb</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">'RuntimeError: '</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>RuntimeError:  stack expects each tensor to be equal size, but got [1] at entry 0 and [2] at entry 1
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>With variable sized xs and a custom collate function, we could pad them to match the longest in the batch using <code>torch.nn.utils.rnn.pad_sequence</code>.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">torch.nn.utils.rnn</span> <span class="kn">import</span> <span class="n">pad_sequence</span>
+
+<span class="k">def</span> <span class="nf">pad_x_collate_function</span><span class="p">(</span><span class="n">batch</span><span class="p">):</span>
+    <span class="c1"># batch looks like [(x0,y0), (x4,y4), (x2,y2)... ]</span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="n">sample</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">]</span>
+    <span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="n">sample</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">]</span> 
+    <span class="c1"># If you want to be a little fancy, you can do the above in one line </span>
+    <span class="c1"># xs, ys = zip(*samples) </span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="n">pad_sequence</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">padding_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">xs</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>And now, we can pass this <code>pad_x_collate_function</code> to <code>collate_fn</code> in <code>DataLoader</code> and it will pad each batch.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">xb</span><span class="p">,</span> <span class="n">yb</span> <span class="ow">in</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">collate_fn</span><span class="o">=</span><span class="n">pad_x_collate_function</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">xb</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>tensor([[5, 0],
+        [3, 8]])
+tensor([[7, 7, 1, 0],
+        [2, 6, 5, 7]])
+tensor([[5, 1, 4, 0, 7, 0],
+        [0, 1, 2, 1, 4, 9]])
+tensor([[2, 3, 0, 9, 3, 4, 4, 0],
+        [2, 8, 8, 5, 7, 8, 2, 8]])
+tensor([[5, 4, 0, 2, 1, 9, 5, 3, 2, 0],
+        [9, 2, 4, 7, 4, 3, 6, 6, 6, 7]])
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here is it with <code>shuffle=True</code>.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">xb</span><span class="p">,</span> <span class="n">yb</span> <span class="ow">in</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">collate_fn</span><span class="o">=</span><span class="n">pad_x_collate_function</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">'xs: '</span><span class="p">,</span> <span class="n">xb</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">'ys: '</span><span class="p">,</span> <span class="n">yb</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>xs:  tensor([[9, 2, 4, 7, 4, 3, 6, 6, 6, 7],
+        [2, 8, 8, 5, 7, 8, 2, 8, 0, 0]])
+ys:  tensor([19, 17])
+xs:  tensor([[2, 6, 5, 7],
+        [5, 0, 0, 0]])
+ys:  tensor([13, 10])
+xs:  tensor([[5, 4, 0, 2, 1, 9, 5, 3, 2],
+        [2, 3, 0, 9, 3, 4, 4, 0, 0]])
+ys:  tensor([18, 16])
+xs:  tensor([[5, 1, 4, 0, 7],
+        [3, 8, 0, 0, 0]])
+ys:  tensor([14, 11])
+xs:  tensor([[7, 7, 1, 0, 0, 0],
+        [0, 1, 2, 1, 4, 9]])
+ys:  tensor([12, 15])
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Another-slight-problem">
+<a class="anchor" href="#Another-slight-problem" aria-hidden="true"><span class="octicon octicon-link"></span></a>Another slight problem<a class="anchor-link" href="#Another-slight-problem"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>But there's a bit of an issue, some of the smaller values look the they have too much padding. Luckily, we've already created something that'll help here. We can use our <code>EachHalfTogetherBatchSampler</code> custom <code>batch_sampler</code> so that the first and second half are batched separately.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">each_half_together_batch_sampler</span> <span class="o">=</span> <span class="n">EachHalfTogetherBatchSampler</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">xb</span><span class="p">,</span> <span class="n">yb</span> <span class="ow">in</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">collate_fn</span><span class="o">=</span><span class="n">pad_x_collate_function</span><span class="p">,</span> <span class="n">batch_sampler</span><span class="o">=</span><span class="n">each_half_together_batch_sampler</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">xb</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>tensor([[7, 7, 1, 0, 0],
+        [5, 1, 4, 0, 7]])
+tensor([[5, 4, 0, 2, 1, 9, 5, 3, 2],
+        [0, 1, 2, 1, 4, 9, 0, 0, 0]])
+tensor([[2, 3, 0, 9, 3, 4, 4, 0],
+        [2, 8, 8, 5, 7, 8, 2, 8]])
+tensor([[2, 6, 5, 7],
+        [5, 0, 0, 0]])
+tensor([[9, 2, 4, 7, 4, 3, 6, 6, 6, 7]])
+tensor([[3, 8]])
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>And there we go, you can see the zero padding (but not too much!) at the end of each batch.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Conclusion">
+<a class="anchor" href="#Conclusion" aria-hidden="true"><span class="octicon octicon-link"></span></a>Conclusion<a class="anchor-link" href="#Conclusion"> </a>
+</h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>I recommend you to run for this yourself and create your own your Samplers and collate functions. All the code from this post is available <a href="https://github.com/scottire/fastpages/tree/master/_notebooks/2020-11-11-dataloaders-samplers-collate.ipynb">on Github</a>.</p>
+<p>I personally love learning about new parts of PyTorch and finding ways to interact with them. What do you think about these styles of explorations? Did you learn a bit about DataLoaders, Samplers and collate functions by reading this article? If so, feel free to share it, and you’re also more than welcome to contact me (via <a href="https://twitter.com/_ScottCondron">Twitter</a>) if you have any questions, comments, or feedback.</p>
+<p>Thanks for reading! <img class="emoji" title=":rocket:" alt=":rocket:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f680.png" height="20" width="20"></p>
+<p><a href="https://www.twitter.com/_scottcondron">Follow me on Twitter here</a> for more stuff like this.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a href="https://twitter.com/_ScottCondron?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @_ScottCondron</a><script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div>
+<!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js" repo="scottire/fastpages" issue-term="title" label="blogpost-comment" theme="github-light" crossorigin="anonymous" async>
+</script><a class="u-url" href="/jupyter/visualisation/audio/2020/12/02/dataloaders-samplers-collate.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>A blog about Machine Learning, Audio, Software &amp; Visualisation.</p>
+      </div>
+    </div>
+
+    <div class="social-links">
+<ul class="social-media-list">
+<li><a rel="me" href="https://github.com/scottire" title="scottire"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li>
+<li><a rel="me" href="https://twitter.com/_ScottCondron" title="_ScottCondron"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li>
+</ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
