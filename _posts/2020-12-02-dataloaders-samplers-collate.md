@@ -45,7 +45,7 @@ layout: notebook
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="https://www.scottcondron.com/images/copied_from_nb/my_icons/magichat.jpg" alt="magichat.jpg" title="Magic!"></p>
+<p>{% include image.html alt="Magic!" max-width="500" file="<a href="https://www.scottcondron.com/images/copied_from_nb/my_icons/magichat.jpg">https://www.scottcondron.com/images/copied_from_nb/my_icons/magichat.jpg</a>" %}</p>
 
 </div>
 </div>
