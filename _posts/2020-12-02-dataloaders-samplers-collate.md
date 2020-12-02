@@ -514,7 +514,7 @@ tensor([8, 3]) tensor([18, 13])
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="&#160;SequentialSampler">&#160;SequentialSampler<a class="anchor-link" href="#&#160;SequentialSampler"> </a></h2>
+<h2 id="SequentialSampler">SequentialSampler<a class="anchor-link" href="#SequentialSampler"> </a></h2>
 </div>
 </div>
 </div>
@@ -1126,7 +1126,7 @@ tensor([9]) tensor([19])
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="&#160;A-slight-problem">&#160;A slight problem<a class="anchor-link" href="#&#160;A-slight-problem"> </a></h2>
+<h2 id="A-slight-problem">A slight problem<a class="anchor-link" href="#A-slight-problem"> </a></h2>
 </div>
 </div>
 </div>
