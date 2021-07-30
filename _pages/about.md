@@ -14,10 +14,10 @@ The main reason for building this blog was to have an outlet for sharing things 
 
 # What am I up to
 
-I'm currently interested in Deep Learning with Audio, Python software development, Data Visualisation, Optimisation and bits and bobs from lots of other areas.
+I'm currently interested in Deep Learning, Python software development and Data Visualisation... along with bits and bobs from lots of other areas.
 
-I was working as a web/mobile Software Developer for a few years and then went back to University to do an MSc in AI in Heriot Watt University, Edinburgh.
+I was working as a web/mobile Software Developer for a few years and then went back to University to do an MSc in AI in Heriot Watt University, Edinburgh. I then worked for 2 years as a Research Engineer at [Speech Graphics](https://www.speech-graphics.com/).
 
-I'm now working as a Research Engineer in [Speech Graphics](https://www.speech-graphics.com).
+I'm now working as a Machine Learning Engineer at [Weights & Biases](https://wandb.ai/site).
 
 You can [follow me on Twitter here](https://www.twitter.com/_scottcondron).
